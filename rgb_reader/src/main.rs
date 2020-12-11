@@ -1,7 +1,11 @@
 extern crate image;
 
+use crate::image::GenericImageView;
+
 fn main() {
     let im = image::open("C:\\Users\\Hyperbook\\Desktop\\nosa.jpg").unwrap();
+    let (width, height) = im.dimensions();
+    let pixels=width*height;
     let photo = im.to_rgba8();
     let mut r_sum = 0;
     let mut g_sum = 0;
@@ -12,5 +16,6 @@ fn main() {
         b_sum = b_sum + px[2] as u32;
     }
     println!("{} {} {}", r_sum, g_sum, b_sum);
+    println!("{} {} {}", r_sum/pixels,g_sum/pixels,b_sum/pixels);
 }
 
