@@ -7,7 +7,7 @@ fn main() {
 }
 
 pub fn read_pix_from_file(filename: &str) -> (u32,u32,u32) {
-    let im = image::open(filename).unwrap();
+    let im = image::open(filename).expect("File not found.");
     let (width, height) = im.dimensions();
     let pixels = width * height;
     let photo = im.to_rgba8();
