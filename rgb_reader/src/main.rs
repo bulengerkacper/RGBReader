@@ -3,12 +3,10 @@ extern crate image;
 use crate::image::GenericImageView;
 use std::path::Path;
 
-use orbtk::prelude::*;
 use walkdir::WalkDir;
 
 fn main() {
-    gui_handle();
-    walk_through_dirs();
+    look_for_imgs();
     let path = "resources\\nosacz.jpg";
     if Path::new(path).exists() {
         read_pix_from_file(path);
@@ -32,21 +30,40 @@ pub fn read_pix_from_file(filename: &str) -> (u32, u32, u32) {
     (r_sum / pixels, g_sum / pixels, b_sum / pixels)
 }
 
-pub fn walk_through_dirs() {
-    for entry in WalkDir::new("resources\\") {
+fn look_for_imgs() -> Vec<String> {
+    let mut jpegs: Vec<String> = vec![];
+    for entry in WalkDir::new("resources//").contents_first(true) {
         let entry = entry.unwrap();
-        println!("{}", entry.path().display());
+        if entry
+            .path()
+            .display()
+            .to_string()
+            .to_string()
+            .contains("jpeg")
+            || entry
+                .path()
+                .display()
+                .to_string()
+                .to_string()
+                .contains("jpg")
+            || entry
+                .path()
+                .display()
+                .to_string()
+                .to_string()
+                .contains("JPEG")
+            || entry
+                .path()
+                .display()
+                .to_string()
+                .to_string()
+                .contains("JPG")
+        {
+            jpegs.push(entry.path().display().to_string());
+        }
     }
-}
-pub fn gui_handle() {
-    Application::new()
-        .window(|ctx| {
-            Window::new()
-                .title("OrbTk - minimal example")
-                .position((100.0, 100.0))
-                .size(420.0, 730.0)
-                .child(TextBlock::new().text("OrbTk").build(ctx))
-                .build(ctx)
-        })
-        .run();
+    for jpeg in &jpegs {
+        println!("{}", jpeg);
+    }
+    jpegs
 }
