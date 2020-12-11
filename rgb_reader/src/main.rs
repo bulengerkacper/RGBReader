@@ -6,7 +6,8 @@ use std::path::Path;
 use walkdir::WalkDir;
 
 fn main() {
-    look_for_imgs();
+    paths_of_images_from_resources();
+    //@TODO here connect Vec<String> and read_pix_from_file 
     let path = "resources\\nosacz.jpg";
     if Path::new(path).exists() {
         read_pix_from_file(path);
@@ -26,11 +27,10 @@ pub fn read_pix_from_file(filename: &str) -> (u32, u32, u32) {
         g_sum = g_sum + px[1] as u32;
         b_sum = b_sum + px[2] as u32;
     }
-    // println!("{} {} {} ",r_sum / pixels, g_sum / pixels, b_sum / pixels );
     (r_sum / pixels, g_sum / pixels, b_sum / pixels)
 }
 
-fn look_for_imgs() -> Vec<String> {
+fn paths_of_images_from_resources() -> Vec<String> {
     let mut jpegs: Vec<String> = vec![];
     for entry in WalkDir::new("resources//").contents_first(true) {
         let entry = entry.unwrap();
