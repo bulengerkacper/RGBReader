@@ -6,7 +6,7 @@ fn main() {
     read_pix_from_file("C:\\Users\\Hyperbook\\Desktop\\nosa.jpg");
 }
 
-pub fn read_pix_from_file(filename: &str) {
+pub fn read_pix_from_file(filename: &str) -> (u32,u32,u32) {
     let im = image::open(filename).unwrap();
     let (width, height) = im.dimensions();
     let pixels = width * height;
@@ -19,6 +19,5 @@ pub fn read_pix_from_file(filename: &str) {
         g_sum = g_sum + px[1] as u32;
         b_sum = b_sum + px[2] as u32;
     }
-    println!("{} {} {}", r_sum, g_sum, b_sum);
-    println!("{} {} {}", r_sum / pixels, g_sum / pixels, b_sum / pixels);
+    (r_sum / pixels, g_sum / pixels, b_sum / pixels)
 }
