@@ -1,16 +1,16 @@
 extern crate image;
-use std::path::Path;
 
 use crate::image::GenericImageView;
+use std::path::Path;
 
 fn main() {
     let path = "C:\\Users\\Hyperbook\\Desktop\\nosa.jpg";
-    if(Path::new(path).exists()) {
+    if (Path::new(path).exists()) {
         read_pix_from_file(path);
     }
 }
 
-pub fn read_pix_from_file(filename: &str) -> (u32,u32,u32) {
+pub fn read_pix_from_file(filename: &str) -> (u32, u32, u32) {
     let im = image::open(filename).unwrap();
     let (width, height) = im.dimensions();
     let pixels = width * height;
@@ -25,4 +25,3 @@ pub fn read_pix_from_file(filename: &str) -> (u32,u32,u32) {
     }
     (r_sum / pixels, g_sum / pixels, b_sum / pixels)
 }
-
