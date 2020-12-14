@@ -2,8 +2,12 @@ extern crate image;
 
 use crate::image::GenericImageView;
 use std::path::Path;
+use std::fmt;
 
-use iced::{button, Align, Button, Column, Container, Element, Sandbox, Settings, Text};
+use iced::{
+    button, pick_list, scrollable, Align, Button, Column, Container, Element,PickList, Sandbox,Scrollable, Settings,
+    Text,
+};
 use walkdir::WalkDir;
 
 fn main() -> iced::Result {
@@ -75,17 +79,22 @@ fn paths_of_images_from_resources() -> Vec<String> {
 
 #[derive(Default)]
 struct Processor {
-    value: String,
     processing_button: button::State,
+    scroll: scrollable::State,
+    pick_list: pick_list::State<Location>,
+    selected_location: Location,
 }
 
-#[derive(Debug, Clone, Copy)]
+//Copy
+#[derive(Debug, Clone)]
 pub enum Message {
+    LocationSellected(Location),
     PerformProcessing,
 }
 
 impl Sandbox for Processor {
     type Message = Message;
+
     fn new() -> Self {
         Self::default()
     }
@@ -98,6 +107,13 @@ impl Sandbox for Processor {
         let process_button = Button::new(&mut self.processing_button, Text::new("Process"))
             .on_press(Message::PerformProcessing);
 
+        let pick_list = PickList::new(
+            &mut self.pick_list,paths_of_images_from_resources(), Some(self.selected_location),
+            Message::LocationSellected,
+        );
+
+        let mut cotent = Scrollable::new(&mut self.scroll).push(pick_list);
+
         let content = Column::new()
             .align_items(Align::Center)
             .push(process_button);
@@ -109,6 +125,29 @@ impl Sandbox for Processor {
             Message::PerformProcessing => {
                 perform_on_all_paths();
             }
+            Message::LocationSellected(location) => {
+                self.selected_location = location;
+            }
         }
+    }
+}
+// copy
+#[derive(Debug,Clone,PartialEq,Eq)]
+pub struct Location {
+    name: String
+}
+impl Location {
+
+}
+
+impl Default for Location {
+    fn default() -> Location {
+        Location {name : "No path".to_string()}
+    }
+}
+
+impl std::fmt::Display for Location {
+    fn fmt(&self,f: &mut fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f,"{}", self.name)
     }
 }
