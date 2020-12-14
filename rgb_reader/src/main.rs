@@ -3,10 +3,10 @@ extern crate image;
 use crate::image::GenericImageView;
 use std::path::Path;
 
+use iced::{button, Align, Button, Column, Container, Element, Sandbox, Settings, Text};
 use walkdir::WalkDir;
-use iced::{button, Button, Column,Element, Text,Sandbox, Settings};
 
-fn main()  ->iced::Result {
+fn main() -> iced::Result {
     Processor::run(Settings::default())
 }
 
@@ -34,7 +34,7 @@ pub fn read_pix_from_file(filename: &str) -> (u32, u32, u32) {
         b_sum = b_sum + px[2] as u32;
     }
     println!("{} ", filename);
-    println!("{} {} {} ",r_sum / pixels, g_sum / pixels, b_sum / pixels );
+    println!("{} {} {} ", r_sum / pixels, g_sum / pixels, b_sum / pixels);
     (r_sum / pixels, g_sum / pixels, b_sum / pixels)
 }
 
@@ -89,13 +89,19 @@ impl Sandbox for Processor {
     fn new() -> Self {
         Self::default()
     }
-    
+
     fn title(&self) -> String {
         String::from("RGB Image Processor.")
     }
 
     fn view(&mut self) -> Element<Message> {
-        Column::new().push(Button::new(&mut self.processing_button, Text::new("Process")).on_press(Message::PerformProcessing),).into()
+        let process_button = Button::new(&mut self.processing_button, Text::new("Process"))
+            .on_press(Message::PerformProcessing);
+
+        let content = Column::new()
+            .align_items(Align::Center)
+            .push(process_button);
+        Container::new(content).center_x().center_y().into()
     }
 
     fn update(&mut self, message: Message) {
