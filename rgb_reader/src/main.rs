@@ -16,12 +16,12 @@ fn main() {
             let con = &file[..];
             let popup_options = vec!["OK"];
             let mut menu_item = MenuItem::new(&popup_options);
+            if Path::new(con).exists() {
+                let rgbs = read_pix_from_file(con);
+            }
             match menu_item.popup(100,100) {
                 None => println!("None"),
                 Some(val) => println!("{}", val.label().unwrap()),
-            }
-            if Path::new(con).exists() {
-                let rgbs = read_pix_from_file(con);
             }
         }
     });
