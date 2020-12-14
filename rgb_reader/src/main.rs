@@ -2,7 +2,6 @@ extern crate image;
 
 use crate::image::GenericImageView;
 use std::path::Path;
-use walkdir::WalkDir;
 
 use fltk::{app::*, button::*, dialog::*, window::*};
 
@@ -13,17 +12,17 @@ fn main() {
     wind.end();
     wind.show();
     but.set_callback(|| {
-        let file = file_chooser("Choose a file", "*.jpg", ".", true).unwrap();
-        println!("{}", file);
-        let con = &file[..];
-        if Path::new(&con).exists() {
-            read_pix_from_file(&con);
+
+        if let Some(file) = file_chooser("Choose a file", "*.jpg", ".", true) {
+            let con = &file[..];
+            if Path::new(con).exists() {
+                read_pix_from_file(con);
+            }
         }
+
     });
     app.run().unwrap();
 }
-
-
 
 pub fn read_pix_from_file(filename: &str) -> (u32, u32, u32) {
     let im = image::open(filename).unwrap();
