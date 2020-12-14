@@ -2,16 +2,24 @@ extern crate image;
 
 use crate::image::GenericImageView;
 use std::path::Path;
-use std::fmt;
-
-use iced::{
-    button, pick_list, scrollable, Align, Button, Column, Container, Element,PickList, Sandbox,Scrollable, Settings,
-    Text,
-};
 use walkdir::WalkDir;
 
-fn main() -> iced::Result {
-    Processor::run(Settings::default())
+use fltk::{app::*, button::*, dialog::*, window::*};
+
+fn main() {
+    let app = App::default();
+    let mut wind = Window::new(100, 100, 400, 300, "R G B Image Processor.");
+    let mut but = Button::new(160, 210, 80, 40, "Process it!");
+    wind.end();
+    wind.show();
+    but.set_callback(|| {
+        let file = file_chooser("Choose a file", "*.jpg", ".", true).unwrap();
+        println!("{}", file);
+        if Path::new(&con).exists() {
+            read_pix_from_file(&con);
+        }
+    });
+    app.run().unwrap();
 }
 
 pub fn perform_on_all_paths() {
@@ -75,79 +83,4 @@ fn paths_of_images_from_resources() -> Vec<String> {
         }
     }
     jpegs
-}
-
-#[derive(Default)]
-struct Processor {
-    processing_button: button::State,
-    scroll: scrollable::State,
-    pick_list: pick_list::State<Location>,
-    selected_location: Location,
-}
-
-//Copy
-#[derive(Debug, Clone)]
-pub enum Message {
-    LocationSellected(Location),
-    PerformProcessing,
-}
-
-impl Sandbox for Processor {
-    type Message = Message;
-
-    fn new() -> Self {
-        Self::default()
-    }
-
-    fn title(&self) -> String {
-        String::from("RGB Image Processor.")
-    }
-
-    fn view(&mut self) -> Element<Message> {
-        let process_button = Button::new(&mut self.processing_button, Text::new("Process"))
-            .on_press(Message::PerformProcessing);
-
-        let pick_list = PickList::new(
-            &mut self.pick_list,paths_of_images_from_resources(), Some(self.selected_location),
-            Message::LocationSellected,
-        );
-
-        let mut cotent = Scrollable::new(&mut self.scroll).push(pick_list);
-
-        let content = Column::new()
-            .align_items(Align::Center)
-            .push(process_button);
-        Container::new(content).center_x().center_y().into()
-    }
-
-    fn update(&mut self, message: Message) {
-        match message {
-            Message::PerformProcessing => {
-                perform_on_all_paths();
-            }
-            Message::LocationSellected(location) => {
-                self.selected_location = location;
-            }
-        }
-    }
-}
-// copy
-#[derive(Debug,Clone,PartialEq,Eq)]
-pub struct Location {
-    name: String
-}
-impl Location {
-
-}
-
-impl Default for Location {
-    fn default() -> Location {
-        Location {name : "No path".to_string()}
-    }
-}
-
-impl std::fmt::Display for Location {
-    fn fmt(&self,f: &mut fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f,"{}", self.name)
-    }
 }
