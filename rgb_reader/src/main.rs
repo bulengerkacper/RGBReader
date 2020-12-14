@@ -15,6 +15,7 @@ fn main() {
     but.set_callback(|| {
         let file = file_chooser("Choose a file", "*.jpg", ".", true).unwrap();
         println!("{}", file);
+        let con = &file[..];
         if Path::new(&con).exists() {
             read_pix_from_file(&con);
         }
@@ -22,15 +23,7 @@ fn main() {
     app.run().unwrap();
 }
 
-pub fn perform_on_all_paths() {
-    let images_paths = paths_of_images_from_resources();
-    for path in images_paths {
-        let con = &path[..];
-        if Path::new(&con).exists() {
-            read_pix_from_file(&con);
-        }
-    }
-}
+
 
 pub fn read_pix_from_file(filename: &str) -> (u32, u32, u32) {
     let im = image::open(filename).unwrap();
@@ -48,39 +41,4 @@ pub fn read_pix_from_file(filename: &str) -> (u32, u32, u32) {
     println!("{} ", filename);
     println!("{} {} {} ", r_sum / pixels, g_sum / pixels, b_sum / pixels);
     (r_sum / pixels, g_sum / pixels, b_sum / pixels)
-}
-
-fn paths_of_images_from_resources() -> Vec<String> {
-    let mut jpegs: Vec<String> = vec![];
-    for entry in WalkDir::new("resources//").contents_first(true) {
-        let entry = entry.unwrap();
-        if entry
-            .path()
-            .display()
-            .to_string()
-            .to_string()
-            .contains("jpeg")
-            || entry
-                .path()
-                .display()
-                .to_string()
-                .to_string()
-                .contains("jpg")
-            || entry
-                .path()
-                .display()
-                .to_string()
-                .to_string()
-                .contains("JPEG")
-            || entry
-                .path()
-                .display()
-                .to_string()
-                .to_string()
-                .contains("JPG")
-        {
-            jpegs.push(entry.path().display().to_string());
-        }
-    }
-    jpegs
 }
