@@ -12,14 +12,13 @@ fn main() {
     wind.end();
     wind.show();
     but.set_callback(|| {
-
         if let Some(file) = file_chooser("Choose a file", "*.jpg", ".", true) {
             let con = &file[..];
             if Path::new(con).exists() {
-                read_pix_from_file(con);
+                let rgbs = read_pix_from_file(con);
+                println!("{} {} {} ", rgbs.0, rgbs.1, rgbs.2);
             }
         }
-
     });
     app.run().unwrap();
 }
@@ -38,6 +37,5 @@ pub fn read_pix_from_file(filename: &str) -> (u32, u32, u32) {
         b_sum = b_sum + px[2] as u32;
     }
     println!("{} ", filename);
-    println!("{} {} {} ", r_sum / pixels, g_sum / pixels, b_sum / pixels);
     (r_sum / pixels, g_sum / pixels, b_sum / pixels)
 }
