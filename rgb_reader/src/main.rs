@@ -3,7 +3,7 @@ extern crate image;
 use crate::image::GenericImageView;
 use std::path::Path;
 
-use fltk::{app::*, button::*, dialog::*, window::*};
+use fltk::{app::*, button::*,menu::*, dialog::*, window::*};
 
 fn main() {
     let app = App::default();
@@ -14,9 +14,14 @@ fn main() {
     but.set_callback(|| {
         if let Some(file) = file_chooser("Choose a file", "*.jpg", ".", true) {
             let con = &file[..];
+            let popup_options = vec!["OK"];
+            let mut menu_item = MenuItem::new(&popup_options);
+            match menu_item.popup(100,100) {
+                None => println!("None"),
+                Some(val) => println!("{}", val.label().unwrap()),
+            }
             if Path::new(con).exists() {
                 let rgbs = read_pix_from_file(con);
-                println!("{} {} {} ", rgbs.0, rgbs.1, rgbs.2);
             }
         }
     });
