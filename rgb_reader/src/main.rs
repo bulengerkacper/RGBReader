@@ -7,7 +7,6 @@ use walkdir::WalkDir;
 use iced::{button, Button, Column,Element, Text,Sandbox, Settings};
 
 fn main()  ->iced::Result {
-
     Processor::run(Settings::default())
 }
 
@@ -82,7 +81,7 @@ struct Processor {
 
 #[derive(Debug, Clone, Copy)]
 pub enum Message {
-    BeforeProcessing,
+    PerformProcessing,
 }
 
 impl Sandbox for Processor {
@@ -96,12 +95,12 @@ impl Sandbox for Processor {
     }
 
     fn view(&mut self) -> Element<Message> {
-        Column::new().push(Button::new(&mut self.processing_button, Text::new("Process")).on_press(Message::BeforeProcessing),).into()
+        Column::new().push(Button::new(&mut self.processing_button, Text::new("Process")).on_press(Message::PerformProcessing),).into()
     }
 
     fn update(&mut self, message: Message) {
         match message {
-            Message::BeforeProcessing => {
+            Message::PerformProcessing => {
                 perform_on_all_paths();
             }
         }
