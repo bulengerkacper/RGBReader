@@ -1,6 +1,7 @@
 # RGBReader
-Reads avg of r g b values from image and processing that data in biotechnology project
+Reads avg of r g b values from image 
 
+gui in fltk-rs
 # Requirements
 rust
 
