@@ -27,7 +27,6 @@ fn main() {
             if Path::new(&con).exists() {
                 let rgb_data = RgbData::default();
                 let rgbs = rgb_data.count_avgs(&con);
-                println!("{} {} {}", &rgbs.0, &rgbs.1, &rgbs.2);
                 let (out_r_string, out_g_string, out_b_string) = (
                     &rgbs.0.to_string(),
                     &rgbs.1.to_string(),
@@ -35,6 +34,7 @@ fn main() {
                 );
                 let (out_r_sliced, out_g_sliced, out_b_sliced) =
                     (&out_r_string, &out_g_string, &out_b_string);
+
                 out_r.set_value(out_r_sliced);
                 out_g.set_value(out_g_sliced);
                 out_b.set_value(out_b_sliced);
