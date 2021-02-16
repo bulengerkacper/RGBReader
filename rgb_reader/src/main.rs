@@ -12,9 +12,9 @@ fn main() {
     let app = App::default();
     let mut wind = Window::new(100, 100, 400, 300, "R G B Image Processor.");
     let mut but = Button::new(100, 100, 80, 40, "Process it!");
-    let mut out_r = Output::new(100, 200, 30, 30, "");
-    let mut out_g = Output::new(150, 200, 30, 30, "");
-    let mut out_b = Output::new(200, 200, 30, 30, "");
+    let mut out_r = Output::new(100, 200, 30, 30, "").with_label("R");
+    let mut out_g = Output::new(150, 200, 30, 30, "").with_label("G");
+    let mut out_b = Output::new(200, 200, 30, 30, "").with_label("B");
 
     out_r.set_text_size(14);
     out_g.set_text_size(14);
